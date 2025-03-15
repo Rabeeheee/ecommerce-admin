@@ -97,11 +97,11 @@ class VendorsPage extends StatelessWidget {
         ? Text(vendor.businessName.characters.first)
         : null,
   ),
-  title: Text(vendor.businessName),
-  subtitle: Text(vendor.userName),
+  title: Text(vendor.businessName, overflow: TextOverflow.ellipsis,),
+  subtitle: Text(vendor.userName,overflow: TextOverflow.ellipsis,),
   trailing: SingleChildScrollView(
     scrollDirection: Axis.horizontal,
-    child: Row(
+    child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         SmallLongButton(
@@ -115,7 +115,7 @@ class VendorsPage extends StatelessWidget {
             vendorProvider.getAllVendors();
           },
         ),
-        const SizedBox(width: 10),
+        const SizedBox(height: 6),
         SmallLongButton(
           bgColor: Colors.red,
           text: 'Remove',

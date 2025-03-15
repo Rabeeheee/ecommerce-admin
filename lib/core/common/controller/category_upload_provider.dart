@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:tech_haven_admin/core/model/category_model.dart' as model;
 import 'package:uuid/uuid.dart';
+import 'package:file_picker/file_picker.dart';
 
 class CategoryUploadProvider extends ChangeNotifier {
   TextEditingController categoryTextEditingController = TextEditingController();
@@ -14,11 +15,16 @@ class CategoryUploadProvider extends ChangeNotifier {
       TextEditingController();
 
   Uint8List? categoryImage;
-
+  String? categoryImageExtension;
+  
   bool isLoadingMainCategory = false;
   Uint8List? subCategoryImage;
+  String? subCategoryImageExtension;
+  
   bool isLoadingSubCategory = false;
   Uint8List? variantCategoryImage;
+  String? variantCategoryImageExtension;
+  
   bool isLoadingVariantCategory = false;
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
@@ -51,18 +57,21 @@ class CategoryUploadProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void assignCategoryImage(Uint8List image) {
+  void assignCategoryImage(Uint8List image, String extension) {
     categoryImage = image;
+    categoryImageExtension = extension;
     notifyListeners();
   }
 
-  void assignSubCategoryImage(Uint8List image) {
+  void assignSubCategoryImage(Uint8List image, String extension) {
     subCategoryImage = image;
+    subCategoryImageExtension = extension;
     notifyListeners();
   }
 
-  void assignVariantCategoryImage(Uint8List image) {
+  void assignVariantCategoryImage(Uint8List image, String extension) {
     variantCategoryImage = image;
+    variantCategoryImageExtension = extension;
     notifyListeners();
   }
 
@@ -71,13 +80,18 @@ class CategoryUploadProvider extends ChangeNotifier {
     isLoadingMainCategory = true;
     notifyListeners();
     String mainCategoryID = const Uuid().v1();
-//reference for maincategory
+    //reference for maincategory with proper file extension
     Reference reference = firebaseStorage
         .ref('category')
         .child(mainCategoryID)
-        .child(mainCategoryID);
+        .child('$mainCategoryID.$categoryImageExtension');
 
-    UploadTask uploadTask = reference.putData(categoryImage!);
+    // Set proper content type based on extension
+    SettableMetadata metadata = SettableMetadata(
+      contentType: 'image/${categoryImageExtension}',
+    );
+
+    UploadTask uploadTask = reference.putData(categoryImage!, metadata);
     TaskSnapshot taskSnapshot = await uploadTask;
 
     final downloadURL = await taskSnapshot.ref.getDownloadURL();
@@ -92,6 +106,7 @@ class CategoryUploadProvider extends ChangeNotifier {
     await collectionReference.doc(mainCategoryID).set(categoryModel.toJson());
     isLoadingMainCategory = false;
     categoryImage = null;
+    categoryImageExtension = null;
     categoryTextEditingController.clear();
     notifyListeners();
   }
@@ -112,14 +127,20 @@ class CategoryUploadProvider extends ChangeNotifier {
     isLoadingSubCategory = true;
     notifyListeners();
     String subCategoryID = const Uuid().v1();
-//reference for maincategory
+    
+    //reference for subcategory with proper file extension
     Reference reference = firebaseStorage
         .ref('category')
         .child(mainCategoryID)
         .child(subCategoryID)
-        .child(subCategoryID);
+        .child('$subCategoryID.$subCategoryImageExtension');
 
-    UploadTask uploadTask = reference.putData(subCategoryImage!);
+    // Set proper content type based on extension
+    SettableMetadata metadata = SettableMetadata(
+      contentType: 'image/${subCategoryImageExtension}',
+    );
+
+    UploadTask uploadTask = reference.putData(subCategoryImage!, metadata);
     TaskSnapshot taskSnapshot = await uploadTask;
 
     final downloadURL = await taskSnapshot.ref.getDownloadURL();
@@ -137,6 +158,7 @@ class CategoryUploadProvider extends ChangeNotifier {
         .set(categoryModel.toJson());
     isLoadingSubCategory = false;
     subCategoryImage = null;
+    subCategoryImageExtension = null;
     subCategoryTextEditingController.clear();
     notifyListeners();
   }
@@ -165,15 +187,21 @@ class CategoryUploadProvider extends ChangeNotifier {
     isLoadingVariantCategory = true;
     notifyListeners();
     String variantCategoryID = const Uuid().v1();
-//reference for maincategory
+    
+    //reference for variant category with proper file extension
     Reference reference = firebaseStorage
         .ref('category')
         .child(mainCategoryID)
         .child(subCategoryID)
         .child(variantCategoryID)
-        .child(variantCategoryID);
+        .child('$variantCategoryID.$variantCategoryImageExtension');
 
-    UploadTask uploadTask = reference.putData(variantCategoryImage!);
+    // Set proper content type based on extension
+    SettableMetadata metadata = SettableMetadata(
+      contentType: 'image/${variantCategoryImageExtension}',
+    );
+
+    UploadTask uploadTask = reference.putData(variantCategoryImage!, metadata);
     TaskSnapshot taskSnapshot = await uploadTask;
 
     final downloadURL = await taskSnapshot.ref.getDownloadURL();
@@ -193,21 +221,33 @@ class CategoryUploadProvider extends ChangeNotifier {
         .set(categoryModel.toJson());
     isLoadingVariantCategory = false;
     variantCategoryImage = null;
+    variantCategoryImageExtension = null;
     variantCategoryTextEditingController.clear();
     notifyListeners();
   }
 
   void deleteMainCategory({required String categoryID}) async {
-    // print('hello how are you');
     await firebaseFirestore.collection('categories').doc(categoryID).delete();
   }
 
-  void deleteSubCategory({required String categoryID})async {
-     await firebaseFirestore.collection('categories').doc(selectedMainCategoryIDForDeleting).collection('subCategories').doc(categoryID).delete();
+  void deleteSubCategory({required String categoryID}) async {
+    await firebaseFirestore
+        .collection('categories')
+        .doc(selectedMainCategoryIDForDeleting)
+        .collection('subCategories')
+        .doc(categoryID)
+        .delete();
   }
 
-  void deleteVariantCategory({required String categoryID})async {
-       await firebaseFirestore.collection('categories').doc(selectedMainCategoryIDForDeleting).collection('subCategories').doc(selectedSubCategoryIDForDeleting).collection('variantCategories').doc(categoryID).delete();
+  void deleteVariantCategory({required String categoryID}) async {
+    await firebaseFirestore
+        .collection('categories')
+        .doc(selectedMainCategoryIDForDeleting)
+        .collection('subCategories')
+        .doc(selectedSubCategoryIDForDeleting)
+        .collection('variantCategories')
+        .doc(categoryID)
+        .delete();
   }
 
   Stream<List<model.CategoryModel>> getVariantCategoriesFromFirebaseStream(
@@ -240,11 +280,4 @@ class CategoryUploadProvider extends ChangeNotifier {
     selectedSubCategoryIDForDeleting = subCategoryID;
     notifyListeners();
   }
-
-  // String? selectedVariantCategoryIDForDeleting;
-  // changeSelectedVariantCategoryIDForDeleting(
-  //     {required String variantCategoryID}) {
-  //   selectedVariantCategoryIDForDeleting = variantCategoryID;
-  //   notifyListeners();
-  // }
 }

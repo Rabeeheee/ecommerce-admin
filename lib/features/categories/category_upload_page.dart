@@ -40,10 +40,12 @@ class CategoryUploadPage extends StatelessWidget {
               CustomCard(
                 child: Column(
                   children: [
-                    const TitleAndSubTitleRow(
-                        title: 'Delete Main Categories',
-                        subTitle:
-                            "The Image can't be restored once it's deleted"),
+                    SingleChildScrollView(
+                      child: const TitleAndSubTitleRow(
+                          title: 'Delete Main Categories',
+                          subTitle:
+                              "The Image can't be restored once it's deleted"),
+                    ),
                     const Text(
                       'Click on any Main Category for their subcategory',
                       softWrap: false,
@@ -81,49 +83,53 @@ class CategoryUploadPage extends StatelessWidget {
                                     mainAxisSpacing: 10,
                                     crossAxisSpacing: 10),
                             itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  Stack(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          categoryUploadProvider
-                                              .changeSelectedMainCategoryIdForDeleting(
-                                                  mainCategoryID:
-                                                      snapshot.data![index].id);
-                                          categoryUploadProvider
-                                              .changeSelectedSubCategoryIDForDeleting(
-                                                  subCategoryID: null);
-                                        },
-                                        child: Image.network(
-                                          snapshot.data![index].imageURL!,
+                              return SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            categoryUploadProvider
+                                                .changeSelectedMainCategoryIdForDeleting(
+                                                    mainCategoryID:
+                                                        snapshot.data![index].id);
+                                            categoryUploadProvider
+                                                .changeSelectedSubCategoryIDForDeleting(
+                                                    subCategoryID: null);
+                                          },
+                                          
+                                          child: Image.network(
+                                          snapshot.data![index].imageURL,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
-                                      IconButton(
-                                          onPressed: () {
-                                            showAlertDialog(
-                                              context: context,
-                                              title: 'Deleting Main cateogory',
-                                              content:
-                                                  'Are you sure you want to delete this category',
-                                              onPressed: () {
-                                                categoryUploadProvider
-                                                    .deleteMainCategory(
-                                                        categoryID: snapshot
-                                                            .data![index].id);
-                                                Navigator.of(context).pop();
-                                              },
-                                            );
-                                          },
-                                          icon: const Icon(
-                                            Icons.cancel,
-                                            color: Colors.red,
-                                          ))
-                                    ],
-                                  ),
-                                  Text(snapshot.data![index].categoryName)
-                                ],
+
+                                        IconButton(
+                                            onPressed: () {
+                                              showAlertDialog(
+                                                context: context,
+                                                title: 'Deleting Main cateogory',
+                                                content:
+                                                    'Are you sure you want to delete this category',
+                                                onPressed: () {
+                                                  categoryUploadProvider
+                                                      .deleteMainCategory(
+                                                          categoryID: snapshot
+                                                              .data![index].id);
+                                                  Navigator.of(context).pop();
+                                                },
+                                              );
+                                            },
+                                            icon: const Icon(
+                                              Icons.cancel,
+                                              color: Colors.red,
+                                            ))
+                                      ],
+                                    ),
+                                    Text(snapshot.data![index].categoryName)
+                                  ],
+                                ),
                               );
                             },
                           );

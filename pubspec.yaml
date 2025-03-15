@@ -53,6 +53,8 @@ dependencies:
   shared_preferences: ^2.5.2
   uuid: ^4.5.1
   webview_flutter: ^4.10.0
+  webview_flutter_wkwebview: ^3.18.4
+  webview_flutter_android: ^4.3.3
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +82,8 @@ flutter:
   assets:
     - assets/images/avatar.png
     - assets/images/iphone15.webp
+    - assets/images/car gif.gif
+    - assets/images/Pho.jpeg
     - assets/images/user.png
     - assets/svg/home.svg
     - assets/svg/more.svg

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tech_haven_admin/core/common/controller/banner_upload_provider.dart';
@@ -51,7 +53,7 @@ class TrendingProduct extends StatelessWidget {
 
                           if (result != null) {
                             bannerUploadProvider
-                                .assignTrendingImage(result.bytes!);
+                                .assignTrendingImage(result['bytes'] as Uint8List);
                           } else {
                             showAlertDialog(
                                 context: context,

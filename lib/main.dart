@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tech_haven_admin/const.dart';
@@ -12,12 +14,22 @@ import 'package:tech_haven_admin/core/common/controller/responsive_provider.dart
 import 'package:tech_haven_admin/core/common/controller/vendor_provider.dart';
 import 'package:tech_haven_admin/features/login/splash_screen.dart';
 import 'package:tech_haven_admin/firebase_options.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
+import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.android,
   );
+  if (!kIsWeb) {
+    if (Platform.isAndroid) {
+      WebViewPlatform.instance = AndroidWebViewPlatform();
+    } else if (Platform.isIOS) {
+      WebViewPlatform.instance = WebKitWebViewPlatform();
+    }
+  }
   runApp(const MyApp());
 }
 

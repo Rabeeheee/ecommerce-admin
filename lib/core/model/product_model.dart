@@ -49,33 +49,32 @@ class ProductModel {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
-    return ProductModel(
-      productID: json['productID'],
-      vendorName: json['vendorName'],
-      vendorID: json['vendorID'],
-      brandName: json['brandName'],
-      brandID: json['brandID'],
-      displayImageURL: json['displayImageURL'],
-      name: json['name'],
-      prize: json['prize'] ?? 0.0, // Provide a default value if prize is null
-      oldPrize: json['oldPrize'] ??
-          0.0, // Provide a default value if oldPrize is null
-      quantity: json['quantity'],
-      mainCategory: json['mainCategory'],
-      mainCategoryID: json['mainCategoryID'],
-      subCategory: json['subCategory'],
-      subCategoryID: json['subCategoryID'],
-      variantCategory: json['variantCategory'],
-      variantCategoryID: json['variantCategoryID'],
-      overview: json['overview'],
-      specifications: json['specifications'] != null
-          ? Map<String, String>.from(json['specifications'])
-          : null,
-      shippingCharge: json['shippingCharge'],
-      rating: json['rating'],
-      isPublished: json['isPublished'],
-    );
-  }
+  return ProductModel(
+    productID: json['productID'],
+    vendorName: json['vendorName'],
+    vendorID: json['vendorID'],
+    brandName: json['brandName'],
+    brandID: json['brandID'],
+    displayImageURL: json['displayImageURL'],
+    name: json['name'],
+    prize: json['prize'] != null ? json['prize'].toDouble() : 0.0,
+    oldPrize: json['oldPrize'] != null ? json['oldPrize'].toDouble() : 0.0,
+    quantity: json['quantity'],
+    mainCategory: json['mainCategory'],
+    mainCategoryID: json['mainCategoryID'],
+    subCategory: json['subCategory'],
+    subCategoryID: json['subCategoryID'],
+    variantCategory: json['variantCategory'],
+    variantCategoryID: json['variantCategoryID'],
+    overview: json['overview'],
+    specifications: json['specifications'] != null
+        ? Map<String, String>.from(json['specifications'])
+        : null,
+    shippingCharge: json['shippingCharge']?.toDouble(),
+    rating: json['rating']?.toDouble(),
+    isPublished: json['isPublished'],
+  );
+}
 
   Map<String, dynamic> toJson() {
     return {

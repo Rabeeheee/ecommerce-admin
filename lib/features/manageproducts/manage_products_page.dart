@@ -113,15 +113,12 @@ Widget _buildProductAccordion(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (product.displayImageURL.isNotEmpty)
-               Image.network(
-  product.displayImageURL,
-  width: 100,
-  height: 100,
-  fit: BoxFit.contain,
-  errorBuilder: (context, error, stackTrace) {
-    return Image.asset('assets/images/iphone15.webp', width: 100, height: 100);
-  },
-),
+                Image.network(
+                  product.displayImageURL,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.contain,
+                ),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(

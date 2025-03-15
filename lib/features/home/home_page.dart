@@ -7,9 +7,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SizedBox height(BuildContext context) => SizedBox(
-          height: Responsive.isDesktop(context) ? 30 : 20,
-        );
+    // SizedBox height(BuildContext context) => SizedBox(
+    //       height: Responsive.isDesktop(context) ? 30 : 20,
+    //     );
 
     return SizedBox(
         height: MediaQuery.of(context).size.height,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:typed_data';
 import 'package:tech_haven_admin/features/categories/widgets/category_upload_card.dart';
 import 'package:tech_haven_admin/core/common/controller/category_upload_provider.dart';
 import 'package:tech_haven_admin/utils/image_pick.dart';
@@ -10,12 +11,9 @@ class CategoryUploadWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final categoryProvider = Provider.of<CategoryUploadProvider>(context);
-
     final formKey = GlobalKey<FormState>();
     return Column(
       children: [
-        
         Consumer<CategoryUploadProvider>(
           builder: (context, categoryUploadProvider, child) {
             return CategoryUploadCard(
@@ -29,14 +27,37 @@ class CategoryUploadWidget extends StatelessWidget {
               image: categoryUploadProvider.categoryImage,
               isLoading: categoryUploadProvider.isLoadingMainCategory,
               onTapImage: () async {
-                final result = await imagePicker();
-                if (result != null) {
-                  categoryUploadProvider.assignCategoryImage(result.bytes!);
-                } else {
-                  showAlertDialog(
+                try {
+                  final result = await imagePicker();
+                  if (result != null && result['bytes'] != null) {
+                    categoryUploadProvider.assignCategoryImage(
+                      result['bytes'],
+                      result['extension'] as String
+                    );
+                  } else {
+                    if (context.mounted) {
+                      showAlertDialog(
+                        context: context,
+                        title: 'Image',
+                        content: 'Image is not selected or could not be loaded',
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }
+                      );
+                    }
+                  }
+                } catch (e) {
+                  print("Error picking image: $e");
+                  if (context.mounted) {
+                    showAlertDialog(
                       context: context,
-                      title: 'Image',
-                      content: 'Image is not selected', onPressed: () {  });
+                      title: 'Error',
+                      content: 'Failed to load image: $e',
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }
+                    );
+                  }
                 }
               },
               onPressedButton: () async {
@@ -49,9 +70,13 @@ class CategoryUploadWidget extends StatelessWidget {
                   );
                 } else {
                   showAlertDialog(
-                      context: context,
-                      title: 'Form Failed',
-                      content: 'Complete all the Field Accordingly', onPressed: () {  });
+                    context: context,
+                    title: 'Form Failed',
+                    content: 'Complete all the Field Accordingly',
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }
+                  );
                 }
               },
             );
@@ -72,11 +97,37 @@ class CategoryUploadWidget extends StatelessWidget {
               subForVariantCategory: false,
               isLoading: categoryUploadProvider.isLoadingSubCategory,
               onTapImage: () async {
-                final result = await imagePicker();
-                if (result != null) {
-                  categoryUploadProvider.assignSubCategoryImage(result.bytes!);
-                } else {
-                  print('object');
+                try {
+                  final result = await imagePicker();
+                  if (result != null && result['bytes'] != null) {
+                    categoryUploadProvider.assignSubCategoryImage(
+                      result['bytes'],
+                      result['extension'] as String
+                    );
+                  } else {
+                    if (context.mounted) {
+                      showAlertDialog(
+                        context: context,
+                        title: 'Image',
+                        content: 'Image is not selected or could not be loaded',
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }
+                      );
+                    }
+                  }
+                } catch (e) {
+                  print("Error picking image: $e");
+                  if (context.mounted) {
+                    showAlertDialog(
+                      context: context,
+                      title: 'Error',
+                      content: 'Failed to load image: $e',
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }
+                    );
+                  }
                 }
               },
               onPressedButton: () async {
@@ -94,9 +145,13 @@ class CategoryUploadWidget extends StatelessWidget {
                   );
                 } else {
                   showAlertDialog(
-                      context: context,
-                      title: 'Form Failed',
-                      content: 'Complete all the Field Accordingly', onPressed: () {  });
+                    context: context,
+                    title: 'Form Failed',
+                    content: 'Complete all the Field Accordingly',
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }
+                  );
                 }
               },
             );
@@ -117,12 +172,37 @@ class CategoryUploadWidget extends StatelessWidget {
               subForVariantCategory: true,
               isLoading: categoryUploadProvider.isLoadingVariantCategory,
               onTapImage: () async {
-                final result = await imagePicker();
-                if (result != null) {
-                  categoryUploadProvider
-                      .assignVariantCategoryImage(result.bytes!);
-                } else {
-                  print('object');
+                try {
+                  final result = await imagePicker();
+                  if (result != null && result['bytes'] != null) {
+                    categoryUploadProvider.assignVariantCategoryImage(
+                      result['bytes'],
+                      result['extension'] as String
+                    );
+                  } else {
+                    if (context.mounted) {
+                      showAlertDialog(
+                        context: context,
+                        title: 'Image',
+                        content: 'Image is not selected or could not be loaded',
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }
+                      );
+                    }
+                  }
+                } catch (e) {
+                  print("Error picking image: $e");
+                  if (context.mounted) {
+                    showAlertDialog(
+                      context: context,
+                      title: 'Error',
+                      content: 'Failed to load image: $e',
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }
+                    );
+                  }
                 }
               },
               onPressedButton: () async {
@@ -145,9 +225,13 @@ class CategoryUploadWidget extends StatelessWidget {
                   );
                 } else {
                   showAlertDialog(
-                      context: context,
-                      title: 'Form Failed',
-                      content: 'Complete all the Field Accordingly', onPressed: () {  });
+                    context: context,
+                    title: 'Form Failed',
+                    content: 'Complete all the Field Accordingly',
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }
+                  );
                 }
               },
             );

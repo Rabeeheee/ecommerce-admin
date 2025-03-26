@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:typed_data';
 import 'package:tech_haven_admin/features/categories/widgets/category_upload_card.dart';
 import 'package:tech_haven_admin/core/common/controller/category_upload_provider.dart';
 import 'package:tech_haven_admin/utils/image_pick.dart';
@@ -11,7 +10,6 @@ class CategoryUploadWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
     return Column(
       children: [
         Consumer<CategoryUploadProvider>(

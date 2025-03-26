@@ -50,6 +50,36 @@ class CategoryUploadProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Add these methods to your existing CategoryUploadProvider class
+
+// Reset main category for subcategory
+void resetMainCategoryForSub() {
+  currentSelectedMainCategoryForSub = null;
+  currentSelectedMainCategoryIDForSub = null;
+  notifyListeners();
+}
+
+// Reset main category for variant
+void resetMainCategoryForVariant() {
+  currentSelectedMainCategoryForVarient = null;
+  currentSelectedMainCategoryIDForVarient = null;
+  notifyListeners();
+}
+
+// Reset sub category for variant
+void resetSubCategoryForVariant() {
+  currentSelectedSubCategoryForVarient = null;
+  currentSelectedSubCategoryIDForVarient = null;
+  notifyListeners();
+}
+
+// Reset the selected image
+void resetSelectedImage() {
+  categoryImage = null;
+  categoryImageExtension = null;
+  notifyListeners();
+}
+
   void changeSelectedMainCategoryForVariant(
       String? categoryName, String? categoryID) {
     currentSelectedMainCategoryIDForVarient = categoryID;

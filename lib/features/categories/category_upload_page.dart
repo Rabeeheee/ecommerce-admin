@@ -4,8 +4,6 @@ import 'package:tech_haven_admin/core/common/controller/category_upload_provider
 import 'package:tech_haven_admin/core/common/widgets/custom_card.dart';
 import 'package:tech_haven_admin/core/model/category_model.dart';
 import 'package:tech_haven_admin/features/categories/widgets/category_upload_widget.dart';
-import 'package:tech_haven_admin/features/categories/widgets/cutsom_button.dart';
-import 'package:tech_haven_admin/core/common/controller/responsive_provider.dart';
 import 'package:tech_haven_admin/core/common/widgets/header_widget.dart';
 import 'package:tech_haven_admin/features/categories/widgets/title_and_subtitle_row.dart';
 import 'package:tech_haven_admin/features/main/responsive/responsive.dart';
@@ -16,7 +14,6 @@ class CategoryUploadPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final responsiveProvider = Provider.of<ResponsiveProvider>(context);
     final categoryUploadProvider = Provider.of<CategoryUploadProvider>(context);
     SizedBox height(BuildContext context) => SizedBox(
           height: Responsive.isDesktop(context) ? 30 : 20,
